@@ -1,21 +1,50 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from "react";
+import _ from 'lodash';
+import { Link, graphql } from "gatsby";
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import Layout from "../components/layout";
+import SEO from "../components/seo";
+import { Canada } from "../components/canada.js";
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+class Index extends React.Component{
+  render() {
+    const data = _.reduce(this.props.data.allCurrentSituationCsv.edges, (result, row) => {
+      result[`${row.node.prov}`] = row.node.confirmed;
+      return result;
+    }, {});
 
-export default IndexPage
+    return(
+      <Layout>
+        <SEO title="Home" />
+        <div style={{display: "flex", flexDirection: "column"}}>
+          <span
+            style={{fontSize: 25}}
+            dangerouslySetInnerHTML={{
+              __html: "Below shows <b> confirmed cases </b> of <b> COVID-19 in Canada </b>",
+            }} />
+          <br></br>
+          <span dangerouslySetInnerHTML={{
+            __html: "<i> LAST UPDATE: March 16, 2020, 9 am EST </i>",
+          }} />
+        </div>
+        <Canada data={data}/>
+        <Link to="/About/">About</Link>
+      </Layout>
+    );
+  }
+}
+
+export default Index;
+
+export const IndexQuery = graphql`
+  query {
+    allCurrentSituationCsv {
+      edges {
+        node {
+          prov
+          confirmed
+        }
+      }
+    }
+  }
+`;
