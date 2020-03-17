@@ -15,6 +15,7 @@ import {
   provinces_short,
   d3,
 } from '../shared.js';
+import graphRegistry from "./graphRegistry";
 import { CanadaSVG } from "./CanadaSVG.js";
 import _ from 'lodash';
 
@@ -42,38 +43,9 @@ const get_province_element_id = (prov_key) => `#CA-${prov_key}`;
 
 export class CanadaD3Component {
   constructor(container, options){
-    this.window_width_last_updated_at = window.innerWidth;
-
-    const d3_container = d3.select(container);
-    const base_dispatch_events = [
-      "renderBegin",
-      "renderEnd",
-      'dataMouseEnter',
-      'dataMouseLeave',
-      'dataFocusIn',
-      "dataFocusOut",
-      "dataClick",
-      "dataHover",  
-      "dataHoverOut",
-    ];
-    
-    this.options = options;
-    d3_container
-      .attr("aria-hidden", "true")
-      .append("div")
-      .classed("__svg__", true);
-    d3_container.select(".__svg__").html(CanadaSVG);
-    
-    this.svg = d3_container.select("svg");
-    this.outside_width = d3_container.node().offsetWidth;
-    this.outside_height = options.height || 400;
-    
-    this.html = d3_container; 
-    
-    this.dispatch = options.dispatch = d3.dispatch.apply(
-      this,
-      base_dispatch_events.concat(options.events || []),
-    );
+    options.alternative_svg = CanadaSVG;
+  
+    graphRegistry.setup_graph_instance(this, d3.select(container), options);
   }
 
   render(options) {
@@ -85,8 +57,8 @@ export class CanadaD3Component {
     const y_scale_factor = 1346;
     
     const max_height = 700;
-    const x_scale = this.outside_width / x_scale_factor;
-    const y_scale = max_height / y_scale_factor;
+    const x_scale = (this.outside_width / x_scale_factor) * 1.7;
+    const y_scale = (max_height / y_scale_factor) * 1.7;
     const scale = Math.min(x_scale, y_scale);
     const height = scale * y_scale_factor;
     const padding = ( this.outside_width - (scale * x_scale_factor) ) / 2;

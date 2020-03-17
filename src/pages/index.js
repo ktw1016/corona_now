@@ -24,7 +24,7 @@ class Index extends React.Component{
             }} />
           <br></br>
           <span dangerouslySetInnerHTML={{
-            __html: "<i> LAST UPDATE: March 16, 2020, 9 am EST </i>",
+            __html: "<i> LAST UPDATE: March 17, 2020, 10:30 am EST </i>",
           }} />
         </div>
         <Canada data={data}/>
