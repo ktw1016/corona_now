@@ -1,3 +1,4 @@
+import './legend.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CanadaD3Component } from './CanadaD3Component.js';
@@ -16,7 +17,7 @@ class CanadaGraph extends React.Component {
     this._render();
   }
   _render() {
-    const { data, prov_select_callback } = this.props;
+    const { data, color_scale, prov_select_callback } = this.props;
 
     const graph_area_sel = d3.select( ReactDOM.findDOMNode(this.graph_area.current) );
     
@@ -24,6 +25,7 @@ class CanadaGraph extends React.Component {
       main_color: get_graph_color(1),
       secondary_color: "#8c949e",
       data,
+      color_scale,
     });
 
     let active_prov = false;
@@ -64,17 +66,54 @@ export class Canada extends React.Component{
   render(){
     const { data } = this.props;
     
-    /*const legend_items = _.map(color_scale.ticks(5).reverse(), (tick, idx, ticks) => ({
-      label: idx > 0 ? `${formatter(tick)} - ${formatter(ticks[idx - 1])}` : `${formatter(tick)}+`,
+    const max = d3.max( d3.values( _.last(data) ) );
+    const color_scale = d3.scaleLinear()
+      .domain([0, max])
+      .range([0.2, 1]);
+
+    const legend_items = _.map(color_scale.ticks(5).reverse(), (tick, idx, ticks) => ({
+      label: idx > 0 ? `${tick} - ${ticks[idx - 1]}` : `${tick}+`,
       active: true,
       id: tick,
       color: get_graph_color( color_scale(tick) ),
-    }));*/
+    }));
+
     return (
-      <div className="frow no-container">
-        <div className="fcol-md-9" style={{position: "relative"}}>
+      <div style={{display: "flex", flexDirection: "row"}}>
+        <div className="legend-container" style={{ maxHeight: "220px", width: "15%", marginRight: 55}}>
+          <p style={{marginTop: 0, marginBottom: 0}} className="nav-header centerer">
+              Legend
+          </p>
+          <ul className="legend-list-inline">
+            {_.map(legend_items, ({ color, label, id, active }) => 
+              <li
+                key={id}
+                className="legend-list-el"
+              >
+                <div style={{
+                  display: "flex",
+                  pointerEvents: "none",
+                }}>
+                  <span
+                    aria-hidden={true}
+                    style={{
+                      border: `1px solid ${color}`,
+                      backgroundColor: color,
+                      textAlign: "center",
+                    }}
+                    className={ "legend-color-checkbox" }
+                  >
+                  </span>
+                  <span> { label } </span>
+                </div>
+              </li>,
+            )}
+          </ul>
+        </div>
+        <div style={{position: "relative", width: "100%"}}>
           <CanadaGraph
             data={data}
+            color_scale={color_scale}
             prov_select_callback={this.prov_select_callback}
           />
         </div>

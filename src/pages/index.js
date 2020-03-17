@@ -27,7 +27,7 @@ class Index extends React.Component{
             __html: "<i> LAST UPDATE: March 17, 2020, 10:30 am EST </i>",
           }} />
         </div>
-        <Canada data={data}/>
+        <Canada data={[data]}/>
         <Link to="/About/">About</Link>
       </Layout>
     );

@@ -50,7 +50,7 @@ export class CanadaD3Component {
 
   render(options) {
     this.options = _.extend(this.options, options);
-    const data = [this.options.data];
+    const data = this.options.data;
     const last_year_data = _.last(data);
 
     const x_scale_factor = 1396;
@@ -64,10 +64,7 @@ export class CanadaD3Component {
     const padding = ( this.outside_width - (scale * x_scale_factor) ) / 2;
     const main_color = this.options.main_color;
     const secondary_color = this.options.secondary_color;
-    const max = d3.max( d3.values( _.last(data) ) );
-    const color_scale = d3.scaleLinear()
-      .domain([0, max])
-      .range([0.2, 1]);
+    const color_scale = this.options.color_scale;
 
     const html = this.html;
     const svg = this.svg;
