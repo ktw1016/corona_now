@@ -88,7 +88,7 @@ class GraphRegistry {
     }
   
     instance.svg = container.select("svg");
-    instance.outside_width = container.node().offsetWidth;
+    instance.outside_width = container.node().offsetWidth/1.5;
     instance.outside_height = options.height || 400;
   
     instance.html = container; 

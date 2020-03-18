@@ -79,8 +79,8 @@ export class Canada extends React.Component{
     }));
 
     return (
-      <div style={{display: "flex", flexDirection: "row"}}>
-        <div className="legend-container" style={{ maxHeight: "220px", width: "15%", marginRight: 55}}>
+      <div className="row" style={{margin: "30px 0px 0px 0px"}}>
+        <div className="legend-container col-md-3" style={{maxHeight: "280px", width: "100%"}}>
           <p style={{marginTop: 0, marginBottom: 0}} className="nav-header centerer">
               Legend
           </p>
@@ -110,7 +110,7 @@ export class Canada extends React.Component{
             )}
           </ul>
         </div>
-        <div style={{position: "relative", width: "100%"}}>
+        <div className="col-md-9" style={{position: "relative", width: "100%"}}>
           <CanadaGraph
             data={data}
             color_scale={color_scale}

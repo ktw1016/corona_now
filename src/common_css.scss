@@ -1,0 +1,13 @@
+$primaryColor: #630213;
+$secondaryColor: #D90429;
+$teritaryColor: #8c949e;
+$separatorColor: #EDF2F4;
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}

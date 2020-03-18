@@ -1,0 +1,13 @@
+@import "../common_css.scss";
+.text-align-mid {
+  text-align: center;
+}
+.bold-30 {
+  font-weight: bold;
+  font-size: 30px;
+}
+.bold-red-45 {
+  font-weight: 900;
+  font-size: 45px;
+  color: $secondaryColor;
+}
