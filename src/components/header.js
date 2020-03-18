@@ -32,10 +32,10 @@ const Header = ({ siteTitle }) => (
       </h1>
       <div className="flex-row" style={{minWidth: "200px", justifyContent: "space-evenly"}}>
         <span style={{alignSelf: "flex-end", fontSize: 25}}>
-          <Link to="/">Home</Link>
+          <Link style={{color: "white", textDecoration: "underline"}} to="/">Home</Link>
         </span>
         <span style={{alignSelf: "flex-end", fontSize: 25}}>
-          <Link to="/About/">About</Link>
+          <Link style={{color: "white", textDecoration: "underline"}} to="/About/">About</Link>
         </span>
       </div>
     </div>
