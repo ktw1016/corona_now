@@ -57,8 +57,8 @@ export class CanadaD3Component {
     const y_scale_factor = 1346;
     
     const max_height = 700;
-    const x_scale = (this.outside_width / x_scale_factor) * 1.2;
-    const y_scale = (max_height / y_scale_factor) * 1.2;
+    const x_scale = (this.outside_width / x_scale_factor) * 1.1;
+    const y_scale = (max_height / y_scale_factor) * 1.1;
     const scale = Math.min(x_scale, y_scale);
     const height = scale * y_scale_factor;
     const padding = ( this.outside_width - (scale * x_scale_factor) ) / 2;

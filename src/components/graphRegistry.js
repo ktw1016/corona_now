@@ -28,8 +28,9 @@ class GraphRegistry {
   }
   
   should_graphs_update(){
-    if (typeof window !== 'undefined')
+    if (typeof window !== 'undefined') {
       return window.innerWidth !== this.window_width_last_updated_at;
+    }
   }
 
   update_registry(){
