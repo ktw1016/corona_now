@@ -5,7 +5,7 @@ export default class Dashboard extends React.Component{
   render() {
     const { most_recent_data } = this.props;
 
-    return <div className="flex-row" style={{justifyContent: "space-evenly", margin: "30px 0px 30px 0px"}}>
+    return <div className="flex-row" style={{justifyContent: "space-evenly", margin: "30px 0px 80px 0px"}}>
       <div className="flex-col text-align-mid">
         <span className="bold-30" dangerouslySetInnerHTML={{
           __html: "Total Confirmed Cases",

@@ -46,7 +46,6 @@ class Index extends React.Component{
           }} />
           <DailyTable data={daily_report_data} />
         </div>
-        <Link to="/About/">About</Link>
       </Layout>
     );
   }
