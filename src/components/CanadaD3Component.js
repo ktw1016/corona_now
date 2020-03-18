@@ -77,14 +77,7 @@ export class CanadaD3Component {
       });
     svg.select(".container")
       .attr("transform", `translate(${padding},0), scale(${scale})`);
-
-    // Unhide map components specific to current language
-    svg.selectAll(`.${window.lang}-only`)
-      .styles({
-        opacity: "1",
-      });
-
-
+    
     // Graph event dispatchers
     let previous_event_target_prov_key = false;
     const dispatch_mouseLeave = function(){

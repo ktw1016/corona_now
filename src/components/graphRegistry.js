@@ -4,29 +4,32 @@ import { d3 } from '../shared';
 class GraphRegistry {
   constructor(){
     this.registry = [];
-    this.window_width_last_updated_at = window.innerWidth;
+    this.window_width_last_updated_at = typeof window !== 'undefined' ? window.innerWidth : null;
 
     const that = this;
-    window.addEventListener(
-      "hashchange", 
-      _.debounce(function(){ 
-        that.update_registry();
-      }, 250),
-    );
-
-    window.addEventListener(
-      "resize", 
-      _.debounce(function(){
-        if ( that.should_graphs_update() ){
+    if(typeof window !== 'undefined') {
+      window.addEventListener(
+        "hashchange", 
+        _.debounce(function(){ 
           that.update_registry();
-          that.update_graphs();
-        }
-      }, 250),
-    );
+        }, 250),
+      );
+  
+      window.addEventListener(
+        "resize", 
+        _.debounce(function(){
+          if ( that.should_graphs_update() ){
+            that.update_registry();
+            that.update_graphs();
+          }
+        }, 250),
+      );  
+    }
   }
   
   should_graphs_update(){
-    return window.innerWidth !== this.window_width_last_updated_at;
+    if (typeof window !== 'undefined')
+      return window.innerWidth !== this.window_width_last_updated_at;
   }
 
   update_registry(){
@@ -37,7 +40,7 @@ class GraphRegistry {
   }
 
   update_graphs(){
-    this.window_width_last_updated_at = window.innerWidth;
+    this.window_width_last_updated_at = typeof window !== 'undefined' ? window.innerWidth : null;
 
     this.registry.forEach( (panel_obj) => {
       panel_obj.outside_width = panel_obj.html.node().offsetWidth;
