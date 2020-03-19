@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@nivo/line": "^0.61.1",
     "d3-array": "^1.2.4",
     "d3-axis": "^1.0.12",
     "d3-collection": "^1.0.7",
