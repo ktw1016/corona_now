@@ -1,0 +1,12 @@
+.nav-container {
+  @media(max-width: 420px){
+    display: flex;
+    flex-direction: column;
+  }
+  @media(min-width: 421px){
+    display: flex;
+    flex-direction: row;
+    min-width: 200px;
+    justify-content: space-evenly;
+  }
+}

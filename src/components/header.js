@@ -1,3 +1,4 @@
+import "./header.scss";
 import "../common_css.scss";
 import { Link } from "gatsby";
 import PropTypes from "prop-types";
@@ -30,7 +31,7 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </h1>
-      <div className="flex-row" style={{minWidth: "200px", justifyContent: "space-evenly"}}>
+      <div className="nav-container">
         <span style={{alignSelf: "flex-end", fontSize: 25}}>
           <Link style={{color: "white", textDecoration: "underline"}} to="/">Home</Link>
         </span>

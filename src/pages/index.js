@@ -9,7 +9,7 @@ import DailyTable from "../components/daily_table.js";
 import Dashboard from "../components/Dashboard.js";
 import { Canada } from "../components/canada.js";
 
-const last_updated = "March 17, 2020, 8:00 pm EST";
+const last_updated = "March 18, 2020, 9:00 pm EDT";
 
 class Index extends React.Component{
   render() {
