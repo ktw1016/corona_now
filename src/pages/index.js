@@ -64,6 +64,9 @@ class Index extends React.Component{
       <Layout>
         <SEO title="Home" />
         <div className="flex-col">
+          <a href="https://ko-fi.com/coronanow" target="_blank">
+            <img height="46" style={{border:"0px", height:"46px"}} src="https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2" border="0" alt="Buy Me a Coffee at ko-fi.com"/>
+          </a>
           <span dangerouslySetInnerHTML={{
             __html: `<i> SOURCE: Health Canada (HC) </i>`,
           }} />
@@ -90,6 +93,9 @@ class Index extends React.Component{
             __html: `<i> LAST UPDATED: ${WHO_last_updated} </i>`,
           }} />
           <DailyTable data={daily_report_data} />
+          <a href="https://ko-fi.com/coronanow" target="_blank">
+            <img height="46" style={{border:"0px", height:"46px"}} src="https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2" border="0" alt="Buy Me a Coffee at ko-fi.com"/>
+          </a>
         </div>
       </Layout>
     );
