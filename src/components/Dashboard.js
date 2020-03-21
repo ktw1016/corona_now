@@ -12,15 +12,7 @@ export default class Dashboard extends React.Component{
           __html: "Total Confirmed Cases",
         }} />
         <span className="bold-red-45" dangerouslySetInnerHTML={{
-          __html: most_recent_data.total_cases,
-        }} />
-      </div>
-      <div className="flex-col text-align-mid">
-        <span className="bold-30" dangerouslySetInnerHTML={{
-          __html: "New Confirmed Cases ",
-        }} />
-        <span className="bold-red-45" dangerouslySetInnerHTML={{
-          __html: most_recent_data.new_confirmed,
+          __html: most_recent_data.confirmed,
         }} />
       </div>
       <div className="flex-col text-align-mid">
@@ -28,7 +20,7 @@ export default class Dashboard extends React.Component{
           __html: "Total Deaths",
         }} />
         <span className="bold-red-45" dangerouslySetInnerHTML={{
-          __html: most_recent_data.total_deaths,
+          __html: most_recent_data.death,
         }} />
       </div>
     </div>;
