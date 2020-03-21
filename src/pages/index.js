@@ -9,6 +9,7 @@ import DailyTable from "../components/daily_table.js";
 import Dashboard from "../components/Dashboard.js";
 import NivoLineGraph from '../components/nivo_line_graph.js';
 import { Canada } from "../components/canada.js";
+import { TabbedContent } from "../components/TabbedContent";
 
 const WHO_last_updated = "March 19 2020 23:59 CET";
 const HC_last_updated = "March 20, 2020, 6:00 pm EDT";
@@ -17,8 +18,12 @@ class Index extends React.Component{
   render() {
     const queried_data = this.props.data;
 
-    const total_by_prov_data = _.reduce(queried_data.allCurrentSituationCsv.edges, (result, row) => {
+    const confirmed_by_prov_data = _.reduce(queried_data.allCurrentSituationCsv.edges, (result, row) => {
       result[`${row.node.prov}`] = row.node.confirmed;
+      return result;
+    }, {});
+    const death_by_prov_data = _.reduce(queried_data.allCurrentSituationCsv.edges, (result, row) => {
+      result[`${row.node.prov}`] = row.node.death;
       return result;
     }, {});
     const grand_total_from_prov_data = _.reduce(queried_data.allCurrentSituationCsv.edges, (result, row) => {
@@ -66,13 +71,18 @@ class Index extends React.Component{
             __html: `<i> LAST UPDATED: ${HC_last_updated} </i>`,
           }} />
           <Dashboard most_recent_data={grand_total_from_prov_data} />
-          <span
-            style={{fontSize: 25}}
-            dangerouslySetInnerHTML={{
-              __html: "Below shows <b> confirmed cases </b> of <b> COVID-19 in Canada </b>",
-            }} />
           <NivoLineGraph data={line_graph_data}/>
-          <Canada data={[total_by_prov_data]}/>
+          <TabbedContent
+            tab_keys={["confirmed", "death"]}
+            tab_labels={{
+              confirmed: "Total confirmed cases by province",
+              death: "Total deaths by province",
+            }}
+            tab_pane_contents={{
+              confirmed: <Canada data={[confirmed_by_prov_data]}/>,
+              death: <Canada data={[death_by_prov_data]}/>,
+            }}
+          />
           <span dangerouslySetInnerHTML={{
             __html: `<i> SOURCE: World Health Organization (WHO) </i>`,
           }} />

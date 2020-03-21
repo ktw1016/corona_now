@@ -66,7 +66,12 @@ export class Canada extends React.Component{
   render(){
     const { data } = this.props;
     
-    const max = d3.max( d3.values( _.last(data) ) );
+    const max = _.chain(data)
+      .last()
+      .values()
+      .map(val => _.toInteger(val))
+      .max()
+      .value();
     const color_scale = d3.scaleLinear()
       .domain([0, max])
       .range([0.2, 1]);
@@ -80,7 +85,7 @@ export class Canada extends React.Component{
 
     return (
       <div className="row" style={{margin: "30px 0px 0px 0px"}}>
-        <div className="legend-container col-md-3" style={{maxHeight: "280px", width: "100%"}}>
+        <div className="legend-container col-md-3" style={{maxHeight: "360px", width: "100%"}}>
           <p style={{marginTop: 0, marginBottom: 0}} className="nav-header centerer">
               Legend
           </p>
