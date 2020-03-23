@@ -14,6 +14,7 @@ import * as m from "d3-selection-multi";
 import * as n from "d3-shape";
 import * as o from "d3-transition";
 import * as p from "d3-scale-chromatic";
+import _ from 'lodash';
 
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 // "This is an assign function that copies full descriptors"
@@ -39,7 +40,6 @@ function completeAssign(target, ...sources) {
 const d3 = completeAssign({}, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p);
 
 const graph_color = "#bf1806";
-
 const provinces = {
   ab: "Alberta",
   bc: "British Columbia",
@@ -70,6 +70,21 @@ const provinces_short = {
   yt: "YT",
   nl: "NL",
 };
+const provinces_reversed = {
+  Alberta: "ab",
+  ["British Columbia"]: "bc",
+  Manitoba: "mb",
+  ["New Brunswick"]: "nb",
+  ["Nova Scotia"]: "ns",
+  ["Northwest Territories"]: "nt",
+  Nunavut: "nu",
+  Ontario: "on",
+  ["Prince Edward Island"]: "pe",
+  Quebec: "qc",
+  Saskatchewan: "sk",
+  Yukon: "yt",
+  ["Newfoundland and Labrador"]: "nl",
+};
 
 const hex_to_rgb = (hex) => {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -91,11 +106,21 @@ const get_graph_color = (alpha) => {
   return rgb && `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha || 1})`;
 };
 
+const format_date = (date_str) => {
+  const split_arr = _.drop( _.split(date_str, "_"), 1 );
+  const yyyy = `20${split_arr[2]}`;
+  const mm = split_arr[0] >= 10 ? split_arr[0] : `0${split_arr[0]}`;
+  const dd = split_arr[1] >= 10 ? split_arr[1] : `0${split_arr[1]}`;
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 export {
   d3,
   provinces,
   provinces_short,
+  provinces_reversed,
   graph_color,
   hex_to_rgb,
   get_graph_color,
+  format_date,
 };

@@ -10,16 +10,9 @@ const About = () => (
       <h2> DATA SOURCES </h2>
       <span dangerouslySetInnerHTML={{
         __html: `
-          Currently two data sources are used: <a href='https://www.who.int/' target='_blank' rel='noopener noreferrer'>
-          World Health Organization (WHO) </a> and <a href='https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection.html' target='_blank' rel='noopener noreferrer'>
-          Health Canada </a>.
+          Currently, <a href='https://github.com/CSSEGISandData/COVID-19' target='_blank' rel='noopener noreferrer'>
+          Johns Hopkins University Center for Systems Science and Engineering </a> is used.
         `,
-      }} />
-      <span dangerouslySetInnerHTML={{
-        __html: `
-        Please note that there may be discrepancies between the data visualizations due to different sources
-        updating at different times
-      `,
       }} />
       <br></br>
       <h2> CREDITS </h2>
