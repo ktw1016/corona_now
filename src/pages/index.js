@@ -25,10 +25,6 @@ class Index extends React.Component{
       result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
       return result;
     }, {});
-    const grand_total_from_prov_data = {
-      confirmed: _.sum( _.values(_.map( confirmed_by_all_prov_data, (val) => _.toInteger(val) )) ),
-      death: _.sum( _.values(_.map( death_by_all_prov_data, (val) => _.toInteger(val) )) ),
-    };
     const daily_data = _.reduce(_.zip(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges), (result, row) => {
       const prov_daily_data = _.chain(row[0].node)
         .keys()
@@ -42,9 +38,12 @@ class Index extends React.Component{
             new_confirmed: idx > 0 ? confirmed[current_date] - confirmed[all_dates[idx-1]] : _.toInteger(confirmed[all_dates[idx]]),
             total_deaths: _.toInteger(deaths[current_date]),
             new_deaths: idx > 0 ? deaths[current_date] - deaths[all_dates[idx-1]] : _.toInteger(deaths[all_dates[idx]]),
-          };})
+          };
+        })
         .value();
-      result[provinces_reversed[row[0].node.Province_State]] = prov_daily_data;
+      if(provinces_reversed[row[0].node.Province_State]){
+        result[provinces_reversed[row[0].node.Province_State]] = prov_daily_data;
+      }
       return result;
     },{});
     const canada_daily = _.reduce( _.values(daily_data), (canada_total, prov_data) => {
@@ -67,6 +66,16 @@ class Index extends React.Component{
       });
       return canada_total;
     }, {});
+    const canada_data_today = canada_daily[_.chain(canada_daily)
+      .keys()
+      .last()
+      .value()];
+    const grand_total_canada = {
+      confirmed: canada_data_today.total_confirmed,
+      deaths: canada_data_today.total_deaths,
+      new_confirmed: canada_data_today.new_confirmed,
+      new_deaths: canada_data_today.new_deaths,
+    };
     _.set(daily_data, "canada",
       _.map(canada_daily, (value, date) => ({
         ...value,
@@ -109,7 +118,7 @@ class Index extends React.Component{
           <span dangerouslySetInnerHTML={{
             __html: `<i> LAST UPDATED: ${lastUpdated} </i>`,
           }} />
-          <Dashboard most_recent_data={grand_total_from_prov_data} />
+          <Dashboard most_recent_data={grand_total_canada} />
           <TabbedContent
             tab_keys={["confirmed", "death"]}
             tab_labels={{

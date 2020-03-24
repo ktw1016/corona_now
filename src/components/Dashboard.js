@@ -17,10 +17,26 @@ export default class Dashboard extends React.Component{
       </div>
       <div className="flex-col text-align-mid">
         <span className="bold-30" dangerouslySetInnerHTML={{
+          __html: "New Confirmed Cases Today",
+        }} />
+        <span className="bold-red-45" dangerouslySetInnerHTML={{
+          __html: `↑${most_recent_data.new_confirmed}`,
+        }} />
+      </div>
+      <div className="flex-col text-align-mid">
+        <span className="bold-30" dangerouslySetInnerHTML={{
           __html: "Total Deaths",
         }} />
         <span className="bold-red-45" dangerouslySetInnerHTML={{
-          __html: most_recent_data.death,
+          __html: most_recent_data.deaths,
+        }} />
+      </div>
+      <div className="flex-col text-align-mid">
+        <span className="bold-30" dangerouslySetInnerHTML={{
+          __html: "New Deaths",
+        }} />
+        <span className="bold-red-45" dangerouslySetInnerHTML={{
+          __html: `↑${most_recent_data.new_deaths}`,
         }} />
       </div>
     </div>;
