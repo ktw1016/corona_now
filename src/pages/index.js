@@ -17,11 +17,11 @@ class Index extends React.Component{
     const queried_data = this.props.data;
 
     const lastUpdated = queried_data.allLastUpdatedCsv.edges[0].node.lastUpdated;
-    const confirmed_by_all_prov_data = _.reduce(queried_data.allTimeSeries19CovidConfirmedCsv.edges, (result, row) => {
+    const confirmed_by_all_prov_data = _.reduce(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, (result, row) => {
       result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
       return result;
     }, {});
-    const death_by_all_prov_data = _.reduce(queried_data.allTimeSeries19CovidDeathsCsv.edges, (result, row) => {
+    const death_by_all_prov_data = _.reduce(queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges, (result, row) => {
       result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
       return result;
     }, {});
@@ -29,7 +29,7 @@ class Index extends React.Component{
       confirmed: _.sum( _.values(_.map( confirmed_by_all_prov_data, (val) => _.toInteger(val) )) ),
       death: _.sum( _.values(_.map( death_by_all_prov_data, (val) => _.toInteger(val) )) ),
     };
-    const daily_data = _.reduce(_.zip(queried_data.allTimeSeries19CovidConfirmedCsv.edges, queried_data.allTimeSeries19CovidDeathsCsv.edges), (result, row) => {
+    const daily_data = _.reduce(_.zip(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges), (result, row) => {
       const prov_daily_data = _.chain(row[0].node)
         .keys()
         .drop(1)
@@ -142,7 +142,7 @@ export const IndexQuery = graphql`
         }
       }
     }
-    allTimeSeries19CovidConfirmedCsv(filter: {Country_Region: {eq: "Canada"}}) {
+    allTimeSeriesCovid19DeathsGlobalCsv(filter: {Country_Region: {eq: "Canada"}}) {
       edges {
         node {
           Province_State
@@ -173,10 +173,11 @@ export const IndexQuery = graphql`
           _3_20_20
           _3_21_20
           _3_22_20
+          _3_23_20
         }
       }
     }
-    allTimeSeries19CovidDeathsCsv(filter: {Country_Region: {eq: "Canada"}}) {
+    allTimeSeriesCovid19ConfirmedGlobalCsv(filter: {Country_Region: {eq: "Canada"}}) {
       edges {
         node {
           Province_State
@@ -207,6 +208,7 @@ export const IndexQuery = graphql`
           _3_20_20
           _3_21_20
           _3_22_20
+          _3_23_20
         }
       }
     }

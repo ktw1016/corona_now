@@ -2,8 +2,8 @@ const exec = require('child_process').exec;
 const simpleGit = require('simple-git');
 const fs = require('fs');
 
-const confirmed_file = "time_series_19-covid-Confirmed.csv";
-const deaths_file = "time_series_19-covid-Deaths.csv";
+const confirmed_file = "time_series_covid19_confirmed_global.csv";
+const deaths_file = "time_series_covid19_deaths_global.csv";
 const lastUpdated_file = "lastUpdated.csv";
 const pat_cmd = "echo $GIT_PAT";
 var pat = "";
@@ -59,8 +59,6 @@ const write_last_updated_to_CSV = () => {
 console.log("Start polling..");
 setInterval(async () => {
   await download_and_push_data().then( async () => {
-    await write_last_updated_to_CSV().then( () => {
-      console.log(`Finished polling at: ${getToday()}`);
-    });
+    await write_last_updated_to_CSV();
   });
 }, 1 * 60 * 60 * 1000); //every hour, download, push data and write last updated CSV
