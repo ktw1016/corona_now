@@ -1,8 +1,9 @@
 import './legend.scss';
+import './canada.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CanadaD3Component } from './CanadaD3Component.js';
-import { get_graph_color, d3 } from '../shared.js';
+import { get_graph_color, d3, format_date } from '../shared.js';
 import _ from 'lodash';
 
 class CanadaGraph extends React.Component {
@@ -14,6 +15,9 @@ class CanadaGraph extends React.Component {
     return <div ref={this.graph_area}/>;
   }
   componentDidMount() {
+    this._render();
+  }
+  componentDidUpdate() {
     this._render();
   }
   _render() {
@@ -51,8 +55,10 @@ export class Canada extends React.Component{
     super(props);
 
     this.prov_select_callback = this.prov_select_callback.bind(this);
+    this.date_range = _.keys(props.data.canada);
 
     this.state = {
+      date: _.last(this.date_range),
       prov: null,
     };
   }
@@ -62,11 +68,19 @@ export class Canada extends React.Component{
       this.setState({prov: selected_prov});
     }
   }
-
   render(){
-    const { data } = this.props;
-    
-    const max = _.chain(data)
+    const { date } = this.state;
+    const {
+      data,
+      data_type,
+    } = this.props;
+
+    const processed_data = [_.chain(data)
+      .omit("canada")
+      .map( (prov_data, prov) => [ prov, prov_data[date][data_type] ] )
+      .fromPairs()
+      .value()];
+    const max = _.chain(processed_data)
       .last()
       .values()
       .map(val => _.toInteger(val))
@@ -117,9 +131,21 @@ export class Canada extends React.Component{
         </div>
         <div className="col-md-9" style={{position: "relative", width: "100%"}}>
           <CanadaGraph
-            data={data}
+            data={processed_data}
             color_scale={color_scale}
             prov_select_callback={this.prov_select_callback}
+          />
+        </div>
+        <div className="col-md-12 text-center flex-col" style={{marginTop: 50}}>
+          <span dangerouslySetInnerHTML={{
+            __html: `<i> Above graph is showing results for the date: </i>`,
+          }} />
+          <span className="text-animation"
+            dangerouslySetInnerHTML={{
+              __html: `${format_date(date)}`,
+            }} />
+          <input type="range" min={1} max={this.date_range.length-1} step={1}
+            onChange={ (e) => this.setState({ date: this.date_range[e.target.value] }) }
           />
         </div>
       </div>

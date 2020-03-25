@@ -64,7 +64,7 @@ const provinces_short = {
   nt: "NT",
   nu: "NU",
   on: "ON",
-  pe: "PE",
+  pe: "PEI",
   qc: "QC",
   sk: "SK",
   yt: "YT",

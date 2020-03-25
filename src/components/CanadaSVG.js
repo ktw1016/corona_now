@@ -224,15 +224,15 @@ export const CanadaSVG = `<svg xmlns="http://www.w3.org/2000/svg">
     <g
       class="label"
       id="label-sk"
-      transform="translate(340,890)" />
+      transform="translate(340,895)" />
     <g
       class="label"
       id="label-mb"
-      transform="translate(510,845)" />
+      transform="translate(510,805)" />
     <g
       class="label"
       id="label-on"
-      transform="translate(590,970)" />
+      transform="translate(650,970)" />
     <g
       class="label"
       id="label-qc"
@@ -256,15 +256,15 @@ export const CanadaSVG = `<svg xmlns="http://www.w3.org/2000/svg">
     <g
       class="label"
       id="label-ns"
-      transform="translate(1195,1125)" />
+      transform="translate(1165,1125)" />
     <g
       class="label"
       id="label-nb"
-      transform="translate(995,1165)" />
+      transform="translate(945,1165)" />
     <g
       class="label"
       id="label-pe"
-      transform="translate(1200,1015)" />
+      transform="translate(1220,1005)" />
     <g
       class="label"
       id="label-ncr"

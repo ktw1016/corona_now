@@ -17,50 +17,45 @@ class Index extends React.Component{
     const queried_data = this.props.data;
 
     const lastUpdated = queried_data.allLastUpdatedCsv.edges[0].node.lastUpdated;
-    const confirmed_by_all_prov_data = _.reduce(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, (result, row) => {
-      result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
-      return result;
-    }, {});
     const death_by_all_prov_data = _.reduce(queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges, (result, row) => {
       result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
       return result;
     }, {});
     const daily_data = _.reduce(_.zip(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges), (result, row) => {
-      const prov_daily_data = _.chain(row[0].node)
-        .keys()
-        .drop(1)
-        .map((current_date, idx, all_dates) => {
-          const confirmed = row[0].node;
-          const deaths = row[1].node;
-          return {
-            date: current_date,
-            total_confirmed: _.toInteger(confirmed[current_date]),
-            new_confirmed: idx > 0 ? confirmed[current_date] - confirmed[all_dates[idx-1]] : _.toInteger(confirmed[all_dates[idx]]),
-            total_deaths: _.toInteger(deaths[current_date]),
-            new_deaths: idx > 0 ? deaths[current_date] - deaths[all_dates[idx-1]] : _.toInteger(deaths[all_dates[idx]]),
-          };
-        })
-        .value();
+      const confirmed = row[0].node;
+      const deaths = row[1].node;
+      const confirmed_values = _.omit(confirmed, "Province_State");
+      var prev_date = null;
+      const prov_daily_data = _.reduce(confirmed_values, (prov_result, confirmed_val, date) => {
+        prov_result[date] = {
+          total_confirmed: _.toInteger(confirmed_val),
+          total_deaths: _.toInteger(deaths[date]),
+          new_confirmed: prev_date ? confirmed_val - confirmed[prev_date] : _.toInteger(confirmed_val),
+          new_deaths: prev_date ? deaths[date] - deaths[prev_date] : _.toInteger(deaths[date]),
+        };
+        prev_date = date;
+        return prov_result;
+      }, {});
       if(provinces_reversed[row[0].node.Province_State]){
         result[provinces_reversed[row[0].node.Province_State]] = prov_daily_data;
       }
       return result;
     },{});
-    const canada_daily = _.reduce( _.values(daily_data), (canada_total, prov_data) => {
-      _.forEach(prov_data, (value) => {
-        if(canada_total[value.date]) {
-          canada_total[value.date] = {
-            total_confirmed: canada_total[value.date].total_confirmed += value.total_confirmed,
-            new_confirmed: canada_total[value.date].new_confirmed += value.new_confirmed,
-            total_deaths: canada_total[value.date].total_deaths += value.total_deaths,
-            new_deaths: canada_total[value.date].new_deaths += value.new_deaths,
+    const canada_daily = _.reduce( daily_data, (canada_total, prov_data) => {
+      _.forEach( _.keys(prov_data), date => {
+        if(canada_total[date]) {
+          canada_total[date] = {
+            total_confirmed: canada_total[date].total_confirmed += prov_data[date].total_confirmed,
+            new_confirmed: canada_total[date].new_confirmed += prov_data[date].new_confirmed,
+            total_deaths: canada_total[date].total_deaths += prov_data[date].total_deaths,
+            new_deaths: canada_total[date].new_deaths += prov_data[date].new_deaths,
           };
         } else {
-          canada_total[value.date] = {
-            total_confirmed: value.total_confirmed,
-            new_confirmed: value.new_confirmed,
-            total_deaths: value.total_deaths,
-            new_deaths: value.new_deaths,
+          canada_total[date] = {
+            total_confirmed: prov_data[date].total_confirmed,
+            new_confirmed: prov_data[date].new_confirmed,
+            total_deaths: prov_data[date].total_deaths,
+            new_deaths: prov_data[date].new_deaths,
           };
         }
       });
@@ -76,12 +71,7 @@ class Index extends React.Component{
       new_confirmed: canada_data_today.new_confirmed,
       new_deaths: canada_data_today.new_deaths,
     };
-    _.set(daily_data, "canada",
-      _.map(canada_daily, (value, date) => ({
-        ...value,
-        date: date,
-      })),
-    );
+    _.set(daily_data, "canada", canada_daily);
     /*
     const total_cases_line_graph_data = _.map(queried_data.allDailyReportCsv.edges, (row) => {
       return {
@@ -126,8 +116,12 @@ class Index extends React.Component{
               death: "Total deaths by province",
             }}
             tab_pane_contents={{
-              confirmed: <Canada data={[confirmed_by_all_prov_data]}/>,
-              death: <Canada data={[death_by_all_prov_data]}/>,
+              confirmed: <Canada
+                data={daily_data}
+                data_type={"total_confirmed"} />,
+              death: <Canada
+                data={daily_data}
+                data_type={"total_deaths"} />,
             }}
           />
           <DailyTable data={daily_data.canada} />

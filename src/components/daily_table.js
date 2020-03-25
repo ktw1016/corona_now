@@ -21,14 +21,15 @@ export default class DailyTable extends React.Component{
         </thead>
         <tbody>
           { _.chain(data)
+            .keys()
             .reverse()
-            .map(row => 
-              <tr key={_.uniqueId(row)}>
-                <td key={_.uniqueId(row.date)}> {format_date(row.date)} </td>
-                <td key={_.uniqueId(row.total_confirmed)}> {row.total_confirmed} </td>
-                <td key={_.uniqueId(row.new_confirmed)}> {row.new_confirmed} </td>
-                <td key={_.uniqueId(row.total_deaths)}> {row.total_deaths} </td>
-                <td key={_.uniqueId(row.new_deaths)}> {row.new_deaths} </td>
+            .map(date => 
+              <tr key={_.uniqueId(date)}>
+                <td key={_.uniqueId(date)}> {format_date(date)} </td>
+                <td key={_.uniqueId(data[date].total_confirmed)}> {data[date].total_confirmed} </td>
+                <td key={_.uniqueId(data[date].new_confirmed)}> {data[date].new_confirmed} </td>
+                <td key={_.uniqueId(data[date].total_deaths)}> {data[date].total_deaths} </td>
+                <td key={_.uniqueId(data[date].new_deaths)}> {data[date].new_deaths} </td>
               </tr>,
             )
             .value()

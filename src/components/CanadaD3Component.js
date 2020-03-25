@@ -27,12 +27,10 @@ const ordering = _.chain([
   .value();
 
 const get_province_display_name = (prov_key, scale) => {
-  if ( provinces[prov_key] && (scale > 0.5) ){
-    // If the graph is large enough and the full name is defined, use full name
-    return provinces[prov_key]; 
-  } else if ( provinces_short[prov_key] && (scale < 0.5) ){ 
-    // If the graph is too small and the short name is defined, use short name. Basically bilingual prov codes
+  if ( provinces[prov_key] && (scale <= 0.5 || provinces[prov_key].length >= 20) ){
     return provinces_short[prov_key]; 
+  } else if ( provinces_short[prov_key] && (scale > 0.5 || provinces[prov_key].length < 20) ){ 
+    return provinces[prov_key]; 
   } else {
     return prov_key;
   }
@@ -53,15 +51,15 @@ export class CanadaD3Component {
     const data = this.options.data;
     const last_year_data = _.last(data);
 
-    const x_scale_factor = 1396;
-    const y_scale_factor = 1346;
-    
+    const x_scale_factor = 1396 / 1.6;
+    const y_scale_factor = 1346 / 1.6;
+
     const max_height = 700;
-    const x_scale = (this.outside_width / x_scale_factor) * 1.1;
-    const y_scale = (max_height / y_scale_factor) * 1.1;
-    const scale = Math.min(x_scale, y_scale);
+    const x_scale = (this.outside_width / x_scale_factor);
+    const y_scale = (max_height / y_scale_factor);
+
+    const scale = x_scale > 0.5 ? Math.min(x_scale, y_scale) : Math.min(x_scale, y_scale) *0.6;
     const height = scale * y_scale_factor;
-    const padding = ( this.outside_width - (scale * x_scale_factor) ) / 2;
     const main_color = this.options.main_color;
     const secondary_color = this.options.secondary_color;
     const color_scale = this.options.color_scale;
@@ -72,11 +70,11 @@ export class CanadaD3Component {
     // Set dimensions and scaling of svg
     svg
       .attrs({
-        height: height + "px",
+        height: height * 1.5 + "px",
         width: this.outside_width + "px",
       });
     svg.select(".container")
-      .attr("transform", `translate(${padding},0), scale(${scale})`);
+      .attr("transform", `scale(${scale})`);
     
     // Graph event dispatchers
     let previous_event_target_prov_key = false;
@@ -164,19 +162,18 @@ export class CanadaD3Component {
 
         d3.select(this)
           .styles({
-            left: padding + (scale * coords[0]) + "px",
+            left: (scale * coords[0]) + "px",
             top: scale * coords[1] + "px",
             padding: "5px",
             position: "absolute",
             "border-radius": "5px",
             "text-align": "center",
-            "font-size": "10px",
+            "font-size": scale * "24px",
             "background-color": "#bbc1c9",
           }); 
 
         
         const prov_name = get_province_display_name(prov_key, scale);
-        
         d3.select(this)
           .append("p")
           .style("margin-bottom", "0px")
@@ -185,10 +182,16 @@ export class CanadaD3Component {
 
         d3.select(this)
           .append("p")
+          .attr("class", "label-value")
           .style("margin-bottom", "0px")
           .style("font-weight", "bold")
           .html( last_year_data[prov_key] );
       });
+    html.selectAll("p.label-value")
+      .each( function(prov_key, i){
+        d3.select(this).html(last_year_data[prov_key]);
+      });
+
     // Hide optional map components based on data availability
     const hide_map_components = (selector) => svg
       .selectAll(selector)
