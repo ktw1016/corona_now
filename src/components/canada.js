@@ -144,7 +144,7 @@ export class Canada extends React.Component{
             dangerouslySetInnerHTML={{
               __html: `${format_date(date)}`,
             }} />
-          <input type="range" min={1} max={this.date_range.length-1} step={1}
+          <input type="range" min={1} max={this.date_range.length-1} defaultValue={this.date_range.length-1} step={1}
             onChange={ (e) => this.setState({ date: this.date_range[e.target.value] }) }
           />
         </div>
