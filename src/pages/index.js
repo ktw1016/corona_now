@@ -179,6 +179,7 @@ export const IndexQuery = graphql`
           _3_23_20
           _3_24_20
           _3_25_20
+          _3_26_20
         }
       }
     }
@@ -216,6 +217,7 @@ export const IndexQuery = graphql`
           _3_23_20
           _3_24_20
           _3_25_20
+          _3_26_20
         }
       }
     }
