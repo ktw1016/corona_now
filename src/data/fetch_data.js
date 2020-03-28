@@ -39,20 +39,22 @@ const download_and_push_data = async () => {
   });
 };
 
-const getToday = () => {
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = (today.getMonth() + 1) >= 10 ? today.getMonth() + 1 : `0${today.getMonth() + 1}`; // getMonth() is zero-based
-  const dd = today.getDate() >= 10 ? today.getDate() : `0${today.getDate()}`;
-  const hh = today.getHours() >= 10 ? today.getHours() : `0${today.getHours()}`;
-  const minutes = today.getMinutes() >= 10 ? today.getMinutes() : `0${today.getMinutes()}`;
+const formatDate = (date) => {
+  const yyyy = date.getFullYear();
+  const mm = (date.getMonth() + 1) >= 10 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`; // getMonth() is zero-based
+  const dd = date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`;
+  const hh = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
+  const minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
   return `${yyyy}-${mm}-${dd} ${hh}:${minutes} EDT`;
 };
-const write_last_updated_to_CSV = () => {
-  const writeStream = fs.createWriteStream('./lastUpdated.csv');
 
-  writeStream.write('lastUpdated\n');
-  writeStream.write(getToday());
+const write_last_updated_to_CSV = () => {
+  fs.stat(`./${confirmed_file}`, function(err, stats){
+    var mtime = stats.mtime;
+    const writeStream = fs.createWriteStream('./lastUpdated.csv');
+    writeStream.write('lastUpdated\n');
+    writeStream.write(formatDate(mtime));  
+  });
   console.log("Last Updated CSV written");
 };
 
