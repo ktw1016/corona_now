@@ -17,10 +17,6 @@ class Index extends React.Component{
     const queried_data = this.props.data;
 
     const lastUpdated = queried_data.allLastUpdatedCsv.edges[0].node.lastUpdated;
-    const death_by_all_prov_data = _.reduce(queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges, (result, row) => {
-      result[provinces_reversed[row.node.Province_State]] = _.last( _.values(row.node) );
-      return result;
-    }, {});
     const daily_data = _.reduce(_.zip(queried_data.allTimeSeriesCovid19ConfirmedGlobalCsv.edges, queried_data.allTimeSeriesCovid19DeathsGlobalCsv.edges), (result, row) => {
       const confirmed = row[0].node;
       const deaths = row[1].node;
@@ -180,6 +176,7 @@ export const IndexQuery = graphql`
           _3_24_20
           _3_25_20
           _3_26_20
+          _3_27_20
         }
       }
     }
@@ -218,6 +215,7 @@ export const IndexQuery = graphql`
           _3_24_20
           _3_25_20
           _3_26_20
+          _3_27_20
         }
       }
     }
