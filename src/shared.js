@@ -106,11 +106,16 @@ const get_graph_color = (alpha) => {
   return rgb && `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha || 1})`;
 };
 
-const format_date = (date_str) => {
+const format_date = (date_str, options) => {
   const split_arr = _.drop( _.split(date_str, "_"), 1 );
   const yyyy = `20${split_arr[2]}`;
   const mm = split_arr[0] >= 10 ? split_arr[0] : `0${split_arr[0]}`;
   const dd = split_arr[1] >= 10 ? split_arr[1] : `0${split_arr[1]}`;
+  if(options && options.short_date) {
+    const short_date_mm = _.toInteger(mm) -1;
+    const date_obj = new Date(yyyy, short_date_mm, dd);
+    return `${date_obj.toLocaleString('default', { month: 'short' })} ${dd}`; 
+  }
   return `${yyyy}-${mm}-${dd}`;
 };
 

@@ -244,7 +244,7 @@ export const CanadaSVG = `<svg xmlns="http://www.w3.org/2000/svg">
     <g
       class="label"
       id="label-nt"
-      transform="translate(185,580)" />
+      transform="translate(275,580)" />
     <g
       class="label"
       id="label-yt"

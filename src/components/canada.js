@@ -68,6 +68,18 @@ export class Canada extends React.Component{
       this.setState({prov: selected_prov});
     }
   }
+  componentDidMount() {
+    const rangeBullet = document.getElementsByClassName("rs-label")[0];
+    const slider = document.getElementsByClassName("slider")[0];
+    const range_width = slider.getBoundingClientRect().width - 15;
+    const percent = (slider.value - 1) / (this.date_range.length - 2);
+    const offset = -70;
+
+    // the position of the output
+    const newPosition = range_width * percent + offset;
+    rangeBullet.innerHTML = format_date(this.date_range[slider.value], {short_date: true});
+    rangeBullet.style.left = `${newPosition}px`;
+  }
   render(){
     const { date } = this.state;
     const {
@@ -136,17 +148,32 @@ export class Canada extends React.Component{
             prov_select_callback={this.prov_select_callback}
           />
         </div>
-        <div className="col-md-12 text-center flex-col" style={{marginTop: 50}}>
-          <span dangerouslySetInnerHTML={{
-            __html: `<i> Above graph is showing results for the date: </i>`,
-          }} />
-          <span className="text-animation"
-            dangerouslySetInnerHTML={{
-              __html: `${format_date(date)}`,
-            }} />
-          <input type="range" min={1} max={this.date_range.length-1} defaultValue={this.date_range.length-1} step={1}
-            onChange={ (e) => this.setState({ date: this.date_range[e.target.value] }) }
+        <div className="col-md-12 text-center flex-col">
+          <span className="rs-label"> {format_date(date, {short_date: true})} </span>
+          <input className="slider" type="range" min={1} max={this.date_range.length-1} defaultValue={this.date_range.length-1} step={1}
+            onChange={ (e) => {
+              const rangeBullet = document.getElementsByClassName("rs-label")[0];
+              const range_width = e.currentTarget.getBoundingClientRect().width - 15;
+              const percent = (e.target.value - 1) / (this.date_range.length - 2);
+              const offset = -30;
+
+              // the position of the output
+              const newPosition = range_width * percent + offset;
+              rangeBullet.innerHTML = format_date(this.date_range[e.target.value], {short_date: true});
+              rangeBullet.style.left = `${newPosition}px`;
+              this.setState({ date: this.date_range[e.target.value] });
+            } }
           />
+        </div>
+        <div className="col-md-12 d-flex justify-content-between">
+          <div className="flex-col">
+            <span style={{textAlign: "center"}}> ｜ </span>
+            <span className="slider-min-max"> {format_date(this.date_range[0], {short_date: true})} </span>
+          </div>
+          <div className="flex-col">
+            <span style={{textAlign: "center"}}> ｜ </span>
+            <span className="slider-min-max"> {format_date(_.last(this.date_range), {short_date: true})} </span>
+          </div>
         </div>
       </div>
     );
