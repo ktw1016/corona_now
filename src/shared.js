@@ -119,6 +119,13 @@ const format_date = (date_str, options) => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
+const format_value = (value) => {
+  const number_formatter = _.map(Array(4), (val,ix) =>
+    new Intl.NumberFormat('en-CA', {style: 'decimal', minimumFractionDigits: ix, maximumFractionDigits: ix}) );
+  const rtn = number_formatter[0].format(value);
+  return rtn;
+};
+
 export {
   d3,
   provinces,
@@ -128,4 +135,5 @@ export {
   hex_to_rgb,
   get_graph_color,
   format_date,
+  format_value,
 };

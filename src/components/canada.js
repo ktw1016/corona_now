@@ -3,7 +3,7 @@ import './canada.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CanadaD3Component } from './CanadaD3Component.js';
-import { get_graph_color, d3, format_date } from '../shared.js';
+import { get_graph_color, d3, format_date, format_value } from '../shared.js';
 import _ from 'lodash';
 
 class CanadaGraph extends React.Component {
@@ -103,7 +103,7 @@ export class Canada extends React.Component{
       .range([0.2, 1]);
 
     const legend_items = _.map(color_scale.ticks(5).reverse(), (tick, idx, ticks) => ({
-      label: idx > 0 ? `${tick} - ${ticks[idx - 1]}` : `${tick}+`,
+      label: idx > 0 ? `${format_value(tick)} - ${format_value(ticks[idx - 1])}` : `${format_value(tick)}+`,
       active: true,
       id: tick,
       color: get_graph_color( color_scale(tick) ),

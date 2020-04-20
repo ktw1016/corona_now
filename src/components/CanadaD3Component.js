@@ -14,6 +14,7 @@ import {
   provinces,
   provinces_short,
   d3,
+  format_value,
 } from '../shared.js';
 import graphRegistry from "./graphRegistry";
 import { CanadaSVG } from "./CanadaSVG.js";
@@ -185,11 +186,11 @@ export class CanadaD3Component {
           .attr("class", "label-value")
           .style("margin-bottom", "0px")
           .style("font-weight", "bold")
-          .html( last_year_data[prov_key] );
+          .html( format_value(last_year_data[prov_key]) );
       });
     html.selectAll("p.label-value")
       .each( function(prov_key, i){
-        d3.select(this).html(last_year_data[prov_key]);
+        d3.select(this).html(format_value(last_year_data[prov_key]));
       });
 
     // Hide optional map components based on data availability
